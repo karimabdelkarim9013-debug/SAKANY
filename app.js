@@ -123,14 +123,14 @@ const money = n =>
 
 const grid = $('propertyGrid');
 
-/* تحميل العقارات من التخزين المحلي */
+/* تحميل العقارات وتحديث أسعار الإعلانات التجريبية */
 function loadProperties() {
 
   try {
 
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
-    if (saved && Array.isArray(saved)) {
+    if (Array.isArray(saved)) {
 
       return saved.map(p => {
 
@@ -145,28 +145,46 @@ function loadProperties() {
           area = 'الإسكان القومي';
         }
 
-        /* تحديث أسعار الأسرّة القديمة */
-        if (p.type === 'سرير داخل غرفة') {
+        /* البحث عن الإعلان التجريبي المطابق */
+        const seed = seedProperties.find(
+          item => Number(item.id) === Number(p.id)
+        );
 
-          const beds = Math.max(
-            1,
-            Number(p.beds) || 1
-          );
-
-          return {
-            ...p,
-            area,
-            beds,
-            price: beds * BED_PRICE,
-            tag: `${beds} سرير - ${money(beds * BED_PRICE)} جنيه`
-          };
-
-        }
-
-        return {
+        let updated = {
           ...p,
           area
         };
+
+        /*
+          تحديث أسعار الإعلانات التجريبية
+          حتى لو كانت محفوظة بأسعار قديمة
+        */
+        if (seed) {
+
+          updated.price = seed.price;
+          updated.tag = seed.tag;
+
+          if (seed.beds !== undefined) {
+            updated.beds = seed.beds;
+          }
+
+        }
+
+        /* تحديث سعر السرير لكل الإعلانات */
+        if (updated.type === 'سرير داخل غرفة') {
+
+          const beds = Math.max(
+            1,
+            Number(updated.beds) || 1
+          );
+
+          updated.beds = beds;
+          updated.price = beds * BED_PRICE;
+          updated.tag = `${beds} سرير - ${money(updated.price)} جنيه`;
+
+        }
+
+        return updated;
 
       });
 
@@ -174,7 +192,9 @@ function loadProperties() {
 
     return seedProperties.map(p => ({ ...p }));
 
-  } catch {
+  } catch (error) {
+
+    console.error('Error loading properties:', error);
 
     return seedProperties.map(p => ({ ...p }));
 
@@ -989,7 +1009,7 @@ document.querySelectorAll('.desktop-nav a').forEach(a => {
 /* تشغيل الموقع */
 restoreHero();
 
-/* حفظ الأسعار بعد تحديث الإعلانات القديمة */
+/* حفظ البيانات بعد تحديث الأسعار */
 saveProperties();
 
 updateBedPrice();
