@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#123c35" />
+  <meta name="description" content="سكني - ابحث عن سكنك المناسب في مدينة طيبة بالأقصر." />
+  <title>سكني | ابحث عن بيتك في طيبة</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+  <div class="announcement">
+    <span class="announcement-dot"></span>
+    منصتك للبحث عن سكن مناسب في مدينة طيبة – الأقصر
+  </div>
+
+  <header class="site-header">
+
+    <a class="brand" href="#home" aria-label="سكني - الصفحة الرئيسية">
+      <span class="brand-mark">
+        <svg viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M5 19.5 20 7l15 12.5v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/>
+          <path d="M15 35V22h10v13M3 20 20 5l17 15"/>
+        </svg>
+      </span>
+      <span>
+        <strong>سكني</strong>
+        <small>SAKANY</small>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="القائمة الرئيسية">
+      <a class="active" href="#home">الرئيسية</a>
+      <a href="#listings">تصفح السكن</a>
+      <a href="#how">كيف تعمل المنصة؟</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="btn btn-outline" id="openAddTop">+ أضف إعلانك</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة">☰</button>
+    </div>
+
+  </header>
+
+  <main>
+
+    <section class="hero" id="home">
+
+      <div class="hero-photo" id="heroPhotoContainer">
+        <img
+          id="heroPhoto"
+          src=""
+          alt="صورة الواجهة الرئيسية"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+        >
+      </div>
+
+      <div class="hero-shade"></div>
+
+      <button class="hero-change-photo" id="heroChangePhoto" type="button">
+        📷 تغيير صورة الواجهة
+      </button>
+
+      <div class="hero-content">
+
+        <div class="eyebrow">
+          <span></span>
+          بيتك أقرب مما تتخيل
+        </div>
+
+        <h1>
+          دَوّر على سكنك<br>
+          <em>في طيبة</em> بكل سهولة
+        </h1>
+
+        <p>
+          غرفة، شقة أو سكن مشترك؟ اكتشف اختيارات مناسبة ليك في مكان واحد، وقارن قبل ما تختار.
+        </p>
+
+        <div class="hero-trust">
+          <span>✓ إعلانات واضحة</span>
+          <span>✓ اختيارات متنوعة</span>
+          <span>✓ داخل مدينة طيبة فقط</span>
+        </div>
+
+      </div>
+
+      <div class="search-panel" aria-label="البحث عن سكن">
+
+        <div class="search-heading">
+          <div>
+            <strong>ابدأ رحلة البحث</strong>
+            <small>حدد احتياجاتك وشوف السكن المتاح</small>
+          </div>
+          <span class="search-icon">⌕</span>
+        </div>
+
+        <div class="search-fields">
+
+          <label class="field">
+            <span>المنطقة</span>
+            <select id="areaFilter">
+              <option value="all">كل مناطق طيبة</option>
+              <option value="الإسكان الاجتماعي">الإسكان الاجتماعي</option>
+              <option value="الإسكان القومي">الإسكان القومي</option>
+              <option value="إسكان البنك">إسكان البنك</option>
+              <option value="مدينة الشمس">مدينة الشمس</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>نوع السكن</span>
+            <select id="typeFilter">
+              <option value="all">كل الأنواع</option>
+              <option value="شقة كاملة">شقة كاملة</option>
+              <option value="غرفة">غرفة</option>
+              <option value="سكن مشترك">سكن مشترك</option>
+              <option value="سرير داخل غرفة">سرير داخل غرفة</option>
+            </select>
+          </label>
+
+          <label class="field price-field">
+            <span>أقل سعر شهريًا</span>
+            <select id="priceFilter">
+              <option value="700">700 جنيه</option>
+              <option value="1000">1,000 جنيه</option>
+              <option value="1500">1,500 جنيه</option>
+              <option value="2000">2,000 جنيه</option>
+              <option value="2500">2,500 جنيه</option>
+              <option value="3000">3,000 جنيه</option>
+              <option value="4000">4,000 جنيه</option>
+            </select>
+          </label>
+
+          <button class="btn btn-primary search-button" id="searchButton">
+            <span>⌕</span>
+            ابحث عن سكن
+          </button>
+
+        </div>
+
+        <div class="search-foot">
+          <span>📍 النطاق: مدينة طيبة – الأقصر</span>
+          <span>الأسعار بالجنيه المصري / شهر</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="stats-strip" aria-label="مميزات سكني">
+
+      <div>
+        <b>01</b>
+        <span>
+          <strong>اختيارات متنوعة</strong>
+          <small>من غرفة لحد شقة كاملة</small>
+        </span>
+      </div>
+
+      <div>
+        <b>02</b>
+        <span>
+          <strong>بحث أسهل</strong>
+          <small>فلتر حسب المنطقة والسعر</small>
+        </span>
+      </div>
+
+      <div>
+        <b>03</b>
+        <span>
+          <strong>تفاصيل واضحة</strong>
+          <small>اعرف مواصفات السكن قبل التواصل</small>
+        </span>
+      </div>
+
+    </section>
+
+    <section class="listings section-wrap" id="listings">
+
+      <div class="section-top">
+
+        <div>
+          <div class="eyebrow dark">
+            <span></span>
+            اختيارات سكنية
+          </div>
+
+          <h2>السكن المتاح في <em>طيبة</em></h2>
+          <p>اختار الأنسب لاحتياجاتك وميزانيتك.</p>
+        </div>
+
+        <button class="text-button" id="resetFilters">
+          إعادة ضبط البحث ↶
+        </button>
+
+      </div>
+
+      <div class="listing-toolbar">
+
+        <div class="result-count" id="resultCount">
+          نعرض لك العقارات المتاحة
+        </div>
+
+        <label class="sort-control">
+          ترتيب حسب
+          <select id="sortFilter">
+            <option value="recommended">الأقرب لميزانيتك</option>
+            <option value="low">السعر: الأقل أولًا</option>
+            <option value="high">السعر: الأعلى أولًا</option>
+          </select>
+        </label>
+
+      </div>
+
+      <div class="property-grid" id="propertyGrid" aria-live="polite"></div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        <div>⌕</div>
+        <h3>ملقيناش سكن بالمواصفات دي</h3>
+        <p>جرّب تغيّر المنطقة أو تقلل الحد الأدنى للسعر.</p>
+        <button class="btn btn-primary" id="clearEmpty">
+          عرض كل السكن
+        </button>
+      </div>
+
+      <div class="demo-note">
+        * الإعلانات المعروضة حاليًا بيانات تجريبية لتوضيح شكل المنصة، ويجب التحقق من التفاصيل والتوافر قبل الاتفاق.
+      </div>
+
+    </section>
+
+    <section class="owner-banner section-wrap" id="how">
+
+      <div class="owner-copy">
+
+        <div class="eyebrow">
+          <span></span>
+          عندك وحدة سكنية؟
+        </div>
+
+        <h2>
+          خلّي سكنك يوصل<br>
+          للشخص المناسب
+        </h2>
+
+        <p>
+          أضف تفاصيل وحدتك، وحدد السعر والمنطقة، وخلي الباحثين عن سكن يقدروا يوصلوا لإعلانك بسهولة.
+        </p>
+
+        <button class="btn btn-light" id="openAddBanner">
+          أضف إعلان سكنك <span>←</span>
+        </button>
+
+      </div>
+
+      <div class="owner-art">
+        <div class="art-card">
+          <span class="art-sun"></span>
+          <div class="art-building">
+            <i></i><i></i><i></i><i></i><b></b>
+          </div>
+          <div class="art-ground"></div>
+        </div>
+
+        <div class="floating-tag">
+          مكانك يبدأ من هنا <span>⌂</span>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+
+    <a class="brand footer-brand" href="#home">
+      <span class="brand-mark">
+        <svg viewBox="0 0 40 40">
+          <path d="M5 19.5 20 7l15 12.5v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/>
+          <path d="M15 35V22h10v13M3 20 20 5l17 15"/>
+        </svg>
+      </span>
+
+      <span>
+        <strong>سكني</strong>
+        <small>SAKANY</small>
+      </span>
+    </a>
+
+    <p>منصة تجريبية للبحث عن السكن في مدينة طيبة – الأقصر.</p>
+
+    <span class="copyright">
+      © 2026 SAKANY. جميع الحقوق محفوظة.
+    </span>
+
+  </footer>
+
+  <!-- ================================== -->
+  <!-- كل صور الموقع الأساسية من هنا -->
+  <!-- غيّر رابط src لأي صورة تريد تغييرها -->
+  <!-- ================================== -->
+
+  <div id="imageAssets" hidden>
+
+    <img
+      data-image="hero"
+      src="7.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house1"
+      src="2.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house2"
+      src="3.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house3"
+      src="4.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house4"
+      src="5.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house5"
+      src="11.jpeg"
+      alt=""
+    >
+
+    <img
+      data-image="house6"
+      src="6.jpeg"
+      alt=""
+    >
+
+  </div>
+
+  <!-- نافذة التفاصيل -->
+
+  <div class="modal-backdrop" id="detailsModal" hidden>
+    <section class="modal details-modal" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+      <button class="modal-close" data-close="detailsModal" aria-label="إغلاق">×</button>
+      <div id="detailsContent"></div>
+    </section>
+  </div>
+
+  <!-- نافذة تسجيل دخول الأدمن -->
+
+  <div class="modal-backdrop" id="adminLoginModal" hidden>
+    <section class="modal admin-login-modal" role="dialog" aria-modal="true" aria-labelledby="adminLoginTitle">
+
+      <button class="modal-close" data-close="adminLoginModal" aria-label="إغلاق">×</button>
+
+      <div class="modal-kicker">دخول الإدارة</div>
+
+      <h2 id="adminLoginTitle">سجّل دخولك لإضافة إعلان</h2>
+
+      <p class="modal-intro">
+        إضافة الإعلانات متاحة لحساب الأدمن فقط.
+      </p>
+
+      <form id="adminLoginForm" class="add-form">
+
+        <label>
+          اسم الأدمن
+          <input name="username" type="text" autocomplete="username" required placeholder="اسم المستخدم">
+        </label>
+
+        <label>
+          كلمة المرور
+          <input name="password" type="password" autocomplete="current-password" required placeholder="كلمة المرور">
+        </label>
+
+        <p class="login-error" id="adminLoginError" role="alert" hidden>
+          اسم المستخدم أو كلمة المرور غير صحيحة.
+        </p>
+
+        <button class="btn btn-primary submit-ad" type="submit">
+          تسجيل الدخول والمتابعة
+        </button>
+
+      </form>
+
+    </section>
+  </div>
+
+  <!-- نافذة إضافة إعلان -->
+
+  <div class="modal-backdrop" id="addModal" hidden>
+    <section class="modal add-modal" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+
+      <button class="modal-close" data-close="addModal" aria-label="إغلاق">×</button>
+
+      <div class="modal-kicker">إعلان جديد</div>
+
+      <h2 id="addTitle">أضف وحدتك السكنية</h2>
+
+      <p class="modal-intro">
+        املأ البيانات الأساسية. الإعلان سيظهر كتجربة على هذا الجهاز فقط.
+      </p>
+
+      <form id="addForm" class="add-form">
+
+        <label>
+          عنوان الإعلان
+          <input name="title" required maxlength="65" placeholder="مثال: شقة مريحة قريبة من الخدمات">
+        </label>
+
+        <div class="form-row">
+
+          <label>
+            المنطقة
+            <select name="area" required>
+              <option value="الإسكان الاجتماعي">الإسكان الاجتماعي</option>
+              <option value="الإسكان القومي">الإسكان القومي</option>
+              <option value="إسكان البنك">إسكان البنك</option>
+              <option value="مدينة الشمس">مدينة الشمس</option>
+            </select>
+          </label>
+
+          <label>
+            نوع السكن
+            <select name="type" required>
+              <option>شقة كاملة</option>
+              <option>غرفة</option>
+              <option>سكن مشترك</option>
+              <option>سرير داخل غرفة</option>
+            </select>
+          </label>
+
+        </div>
+
+        <div class="form-row">
+
+          <label>
+            السعر الشهري (جنيه)
+            <input name="price" type="number" min="700" step="50" required placeholder="700">
+          </label>
+
+          <label>
+            عدد الغرف
+            <input name="rooms" type="number" min="1" max="20" value="1">
+          </label>
+
+        </div>
+
+        <label>
+          المساحة بالمتر <span class="optional-label">اختياري</span>
+          <input name="size" type="number" min="1" max="1000" placeholder="مثال: 90">
+        </label>
+
+        <label>
+          صورة السكن <span class="optional-label">اختياري</span>
+          <input id="addImage" type="file" accept="image/*" capture="environment">
+          <span class="upload-hint">يمكنك اختيار صورة من الهاتف أو الكمبيوتر.</span>
+          <div class="image-preview" id="imagePreview"></div>
+          <input type="hidden" id="newImageData">
+        </label>
+
+        <label>
+          وصف السكن
+          <textarea name="description" rows="3" maxlength="400" placeholder="اكتب أهم المميزات والتفاصيل..."></textarea>
+        </label>
+
+        <label>
+          رقم التواصل
+          <input
+  name="phone"
+  type="tel"
+  required
+  inputmode="tel"
+  value="0103119016"
+  placeholder="أدخل رقم الهاتف"
+>
+        </label>
+
+        <div class="form-note">
+          تنبيه: لا تشارك بيانات حساسة. في النسخة النهائية سنضيف مراجعة وتوثيقًا لإعلانات الملاك.
+        </div>
+
+        <button class="btn btn-primary submit-ad" type="submit">
+          نشر الإعلان التجريبي
+        </button>
+
+      </form>
+
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <input id="imagePicker" type="file" accept="image/*" hidden>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
