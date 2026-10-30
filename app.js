@@ -1,3 +1,4 @@
+
 /* SAKANY | واجهة تجريبية تفاعلية - جميع البيانات محلية على الجهاز */
 
 const $ = (id) => document.getElementById(id);
@@ -16,6 +17,9 @@ function getImage(key) {
 
 const DEFAULT_HERO = getImage('hero');
 const DEFAULT_IMAGE = getImage('house1');
+
+/* سعر السرير الواحد */
+const BED_PRICE = 800;
 
 /* العقارات التجريبية */
 const seedProperties = [
@@ -70,14 +74,15 @@ const seedProperties = [
     title: 'سرير داخل غرفة مجهزة',
     area: 'مدينة الشمس',
     type: 'سرير داخل غرفة',
-    price: 700,
+    price: 800,
+    beds: 1,
     rooms: 1,
     baths: 1,
     size: 18,
     image: getImage('house4'),
-    description: 'سرير داخل غرفة مشتركة، خيار اقتصادي للإقامة. تأكد من عدد المقيمين والخدمات قبل الحجز.',
+    description: 'سرير داخل غرفة مشتركة بسعر 800 جنيه شهريًا للسرير الواحد.',
     phone: '0103119016',
-    tag: 'يبدأ من 700 ج'
+    tag: '800 جنيه للسرير'
   },
 
   {
@@ -112,19 +117,11 @@ const seedProperties = [
 
 ];
 
-let properties = loadProperties();
-
-let pendingImageTarget = null;
-let adminAuthenticated = false;
-
-const ADMIN_USERNAME = 'karim';
-const ADMIN_PASSWORD = '2002';
-
+/* تنسيق الأسعار */
 const money = n =>
   new Intl.NumberFormat('ar-EG').format(Number(n) || 0);
 
 const grid = $('propertyGrid');
-
 
 /* تحميل العقارات من التخزين المحلي */
 function loadProperties() {
@@ -137,15 +134,33 @@ function loadProperties() {
 
       return saved.map(p => {
 
-        /* تحويل أسماء المناطق القديمة إلى المناطق الجديدة */
         let area = p.area;
 
+        /* تحويل أسماء المناطق القديمة */
         if (area === 'المساكن') {
           area = 'الإسكان الاجتماعي';
         }
 
         if (area === 'مدينة طيبة') {
           area = 'الإسكان القومي';
+        }
+
+        /* تحديث أسعار الأسرّة القديمة */
+        if (p.type === 'سرير داخل غرفة') {
+
+          const beds = Math.max(
+            1,
+            Number(p.beds) || 1
+          );
+
+          return {
+            ...p,
+            area,
+            beds,
+            price: beds * BED_PRICE,
+            tag: `${beds} سرير - ${money(beds * BED_PRICE)} جنيه`
+          };
+
         }
 
         return {
@@ -157,16 +172,23 @@ function loadProperties() {
 
     }
 
-    return seedProperties.map(x => ({ ...x }));
+    return seedProperties.map(p => ({ ...p }));
 
   } catch {
 
-    return seedProperties.map(x => ({ ...x }));
+    return seedProperties.map(p => ({ ...p }));
 
   }
 
 }
 
+let properties = loadProperties();
+
+let pendingImageTarget = null;
+let adminAuthenticated = false;
+
+const ADMIN_USERNAME = 'karim';
+const ADMIN_PASSWORD = '2002';
 
 /* حفظ العقارات */
 function saveProperties() {
@@ -186,7 +208,6 @@ function saveProperties() {
 
 }
 
-
 /* حماية النصوص */
 function escapeHtml(s = '') {
 
@@ -199,7 +220,6 @@ function escapeHtml(s = '') {
   }[c]));
 
 }
-
 
 /* رسائل التنبيه */
 function showToast(msg) {
@@ -217,6 +237,17 @@ function showToast(msg) {
 
 }
 
+/* عرض عدد الأسرّة أو الغرف */
+function getPropertyCountText(p) {
+
+  if (p.type === 'سرير داخل غرفة') {
+    const beds = Math.max(1, Number(p.beds) || 1);
+    return `${money(beds)} سرير`;
+  }
+
+  return `${money(p.rooms || 1)} غرفة`;
+
+}
 
 /* عرض العقارات */
 function renderProperties() {
@@ -296,7 +327,7 @@ function renderProperties() {
 
           <span>▦ ${escapeHtml(p.type)}</span>
 
-          <span>⌂ ${money(p.rooms)} غرفة</span>
+          <span>⌂ ${getPropertyCountText(p)}</span>
 
           <span>
             ◫ ${p.size ? money(p.size) + ' م²' : 'مساحة غير محددة'}
@@ -325,7 +356,6 @@ function renderProperties() {
 
 }
 
-
 /* فتح وإغلاق النوافذ */
 function openModal(id) {
 
@@ -343,7 +373,6 @@ function openModal(id) {
 
 }
 
-
 function closeModal(id) {
 
   $(id).hidden = true;
@@ -353,7 +382,6 @@ function closeModal(id) {
   }
 
 }
-
 
 /* تفاصيل العقار */
 function showDetails(id) {
@@ -387,7 +415,7 @@ function showDetails(id) {
 
       <span>${escapeHtml(p.type)}</span>
 
-      <span>${money(p.rooms)} غرفة</span>
+      <span>${getPropertyCountText(p)}</span>
 
       <span>${money(p.baths || 1)} حمام</span>
 
@@ -417,7 +445,6 @@ function showDetails(id) {
   openModal('detailsModal');
 
 }
-
 
 /* ضغط الصور قبل الحفظ */
 function compressImage(file) {
@@ -480,7 +507,6 @@ function compressImage(file) {
 
 }
 
-
 /* اختيار صورة */
 function pickImage(target) {
 
@@ -491,7 +517,6 @@ function pickImage(target) {
   $('imagePicker').click();
 
 }
-
 
 /* تغيير صور الواجهة والعقارات */
 $('imagePicker').addEventListener('change', async e => {
@@ -548,7 +573,6 @@ $('imagePicker').addEventListener('change', async e => {
 
 });
 
-
 /* استعادة صورة الواجهة */
 function restoreHero() {
 
@@ -564,7 +588,6 @@ function restoreHero() {
 
 }
 
-
 /* البحث */
 $('searchButton').addEventListener('click', () => {
 
@@ -575,7 +598,6 @@ $('searchButton').addEventListener('click', () => {
   renderProperties();
 
 });
-
 
 /* الفلاتر */
 [
@@ -589,7 +611,6 @@ $('searchButton').addEventListener('click', () => {
 
 });
 
-
 /* إعادة ضبط البحث */
 function resetFilters() {
 
@@ -602,11 +623,9 @@ function resetFilters() {
 
 }
 
-
 $('resetFilters').addEventListener('click', resetFilters);
 
 $('clearEmpty').addEventListener('click', resetFilters);
-
 
 /* أزرار العقارات */
 grid.addEventListener('click', e => {
@@ -649,12 +668,10 @@ grid.addEventListener('click', e => {
 
 });
 
-
 /* تغيير صورة الواجهة */
 $('heroChangePhoto').addEventListener('click', () => {
   pickImage('hero');
 });
-
 
 /* تسجيل الدخول وإضافة إعلان */
 function requestAddAccess() {
@@ -675,7 +692,6 @@ function requestAddAccess() {
 
 }
 
-
 [
   'openAddTop',
   'openAddBanner'
@@ -684,7 +700,6 @@ function requestAddAccess() {
   $(id).addEventListener('click', requestAddAccess);
 
 });
-
 
 /* التحقق من بيانات الأدمن */
 $('adminLoginForm').addEventListener('submit', e => {
@@ -728,7 +743,6 @@ $('adminLoginForm').addEventListener('submit', e => {
 
 });
 
-
 /* إغلاق النوافذ */
 document.querySelectorAll('[data-close]').forEach(b => {
 
@@ -737,7 +751,6 @@ document.querySelectorAll('[data-close]').forEach(b => {
   });
 
 });
-
 
 document.querySelectorAll('.modal-backdrop').forEach(back => {
 
@@ -751,7 +764,6 @@ document.querySelectorAll('.modal-backdrop').forEach(back => {
 
 });
 
-
 document.addEventListener('keydown', e => {
 
   if (e.key === 'Escape') {
@@ -763,7 +775,6 @@ document.addEventListener('keydown', e => {
   }
 
 });
-
 
 /* معاينة صورة الإعلان */
 $('addImage').addEventListener('change', async e => {
@@ -793,6 +804,49 @@ $('addImage').addEventListener('change', async e => {
 
 });
 
+/* حساب سعر السرير تلقائيًا */
+const propertyType = document.querySelector('#addForm [name="type"]');
+const propertyPrice = $('propertyPrice');
+const bedCount = $('bedCount');
+const bedCountField = $('bedCountField');
+const roomCountField = $('roomCountField');
+
+function updateBedPrice() {
+
+  if (!propertyType || !propertyPrice || !bedCount) return;
+
+  const isBed = propertyType.value === 'سرير داخل غرفة';
+
+  if (bedCountField) {
+    bedCountField.hidden = !isBed;
+  }
+
+  if (roomCountField) {
+    roomCountField.hidden = isBed;
+  }
+
+  propertyPrice.readOnly = isBed;
+
+  if (isBed) {
+
+    const beds = Math.max(
+      1,
+      Number(bedCount.value) || 1
+    );
+
+    propertyPrice.value = beds * BED_PRICE;
+
+  } else {
+
+    propertyPrice.value = '';
+
+  }
+
+}
+
+propertyType?.addEventListener('change', updateBedPrice);
+
+bedCount?.addEventListener('input', updateBedPrice);
 
 /* إضافة إعلان جديد */
 $('addForm').addEventListener('submit', e => {
@@ -823,9 +877,18 @@ $('addForm').addEventListener('submit', e => {
 
   }
 
-  const price = Number(f.get('price'));
+  const type = f.get('type');
 
-  if (price < 700) {
+  const beds = Math.max(
+    1,
+    Number(f.get('beds')) || 1
+  );
+
+  const price = type === 'سرير داخل غرفة'
+    ? beds * BED_PRICE
+    : Number(f.get('price'));
+
+  if (!price || price < 700) {
 
     showToast('الحد الأدنى للسعر هو 700 جنيه شهريًا.');
 
@@ -843,9 +906,11 @@ $('addForm').addEventListener('submit', e => {
 
     area: f.get('area'),
 
-    type: f.get('type'),
+    type,
 
     price,
+
+    beds: type === 'سرير داخل غرفة' ? beds : 0,
 
     rooms: Number(f.get('rooms')) || 1,
 
@@ -861,7 +926,9 @@ $('addForm').addEventListener('submit', e => {
 
     phone,
 
-    tag: 'إعلان تجريبي'
+    tag: type === 'سرير داخل غرفة'
+      ? `${beds} سرير - ${money(price)} جنيه`
+      : 'إعلان تجريبي'
 
   };
 
@@ -879,6 +946,8 @@ $('addForm').addEventListener('submit', e => {
 
   $('imagePreview').classList.remove('has-image');
 
+  updateBedPrice();
+
   closeModal('addModal');
 
   resetFilters();
@@ -890,7 +959,6 @@ $('addForm').addEventListener('submit', e => {
   showToast('تمت إضافة إعلانك وحفظه على هذا الجهاز.');
 
 });
-
 
 /* القائمة في الهاتف */
 $('menuToggle').addEventListener('click', () => {
@@ -906,7 +974,6 @@ $('menuToggle').addEventListener('click', () => {
 
 });
 
-
 document.querySelectorAll('.desktop-nav a').forEach(a => {
 
   a.addEventListener('click', () => {
@@ -919,8 +986,12 @@ document.querySelectorAll('.desktop-nav a').forEach(a => {
 
 });
 
-
 /* تشغيل الموقع */
 restoreHero();
+
+/* حفظ الأسعار بعد تحديث الإعلانات القديمة */
+saveProperties();
+
+updateBedPrice();
 
 renderProperties();
